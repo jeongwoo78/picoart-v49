@@ -1815,21 +1815,20 @@ const ResultScreen = ({
         }
 
         .toggle-button {
-          background: rgba(255,255,255,0.2);
-          border: 2px solid white;
-          color: white;
+          background: white;
+          border: 2px solid #667eea;
+          color: #667eea;
           padding: 0.75rem 1.5rem;
           border-radius: 25px;
           font-size: 1rem;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s;
-          backdrop-filter: blur(10px);
         }
 
         .toggle-button:hover {
-          background: white;
-          color: #667eea;
+          background: #667eea;
+          color: white;
         }
 
         .technique-card {

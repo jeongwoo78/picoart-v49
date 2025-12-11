@@ -152,7 +152,7 @@ export const saveToGallery = async (imageUrl, styleName, categoryName = '') => {
 
 
 // ========== 갤러리 컴포넌트 ==========
-const GalleryScreen = ({ onBack }) => {
+const GalleryScreen = ({ onBack, onHome }) => {
   const [galleryItems, setGalleryItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -232,9 +232,14 @@ const GalleryScreen = ({ onBack }) => {
     <div style={styles.container}>
       {/* 헤더 */}
       <div style={styles.header}>
-        <button style={styles.backButton} onClick={onBack}>
-          ← 뒤로
-        </button>
+        <div style={styles.headerLeft}>
+          <button style={styles.backButton} onClick={onBack}>
+            ← 뒤로
+          </button>
+          <button style={styles.homeButton} onClick={onHome}>
+            🏠 홈
+          </button>
+        </div>
         <h2 style={styles.title}>🖼️ 나의 갤러리</h2>
         {galleryItems.length > 0 && (
           <button style={styles.clearButton} onClick={handleClearAll}>
@@ -385,8 +390,23 @@ const styles = {
     gap: '10px',
   },
   
+  headerLeft: {
+    display: 'flex',
+    gap: '10px',
+  },
+  
   backButton: {
     background: 'rgba(255,255,255,0.1)',
+    border: 'none',
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '1rem',
+  },
+  
+  homeButton: {
+    background: 'rgba(255,255,255,0.2)',
     border: 'none',
     color: 'white',
     padding: '10px 20px',

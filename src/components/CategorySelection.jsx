@@ -14,15 +14,15 @@ const CategorySelection = ({ onSelect, onGallery }) => {
       id: 'masters',
       name: '거장 컬렉션',
       icon: '⭐',
-      description: '시대를 대표하는 거장들',
-      subtext: '고흐, 피카소, 클림트 외 4인'
+      description: '일곱 거장의 세계',
+      subtext: '시대를 초월한 7인의 화가'
     },
     {
       id: 'oriental',
       name: '동양화',
       icon: '🎎',
       description: '한·중·일 전통 미술',
-      subtext: '수묵화, 민화, 우키요에'
+      subtext: '동양의 천년 미학을 담다'
     }
   ];
 
@@ -31,7 +31,7 @@ const CategorySelection = ({ onSelect, onGallery }) => {
       {/* 헤더 */}
       <header className="category-header">
         <h1 className="app-title">🎨 PicoArt</h1>
-        <p className="app-tagline">AI가 당신의 사진을 거장의 그림으로</p>
+        <p className="app-tagline">당신의 사진이 명화가 됩니다</p>
         <button className="gallery-btn" onClick={onGallery}>
           🖼️ 나의 갤러리
         </button>

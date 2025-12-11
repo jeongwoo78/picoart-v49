@@ -102,7 +102,13 @@ const App = () => {
     <div className="app">
       {/* 갤러리 화면 */}
       {showGallery && (
-        <GalleryScreen onBack={() => setShowGallery(false)} />
+        <GalleryScreen 
+          onBack={() => setShowGallery(false)} 
+          onHome={() => {
+            setShowGallery(false);
+            handleReset();
+          }}
+        />
       )}
 
       {/* 메인 앱 */}
@@ -144,10 +150,7 @@ const App = () => {
               aiSelectedWork={aiSelectedWork}
               fullTransformResults={fullTransformResults}
               onReset={handleReset}
-              onGallery={() => {
-                handleReset();
-                setShowGallery(true);
-              }}
+              onGallery={() => setShowGallery(true)}
             />
           )}
         </>
