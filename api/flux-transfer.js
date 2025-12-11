@@ -2037,6 +2037,7 @@ const fallbackPrompts = {
     name: '반 고흐',
     artist: 'Vincent van Gogh (1853-1890)',
     movement: '후기인상주의 (Post-Impressionism)',
+    defaultWork: 'The Starry Night',
     prompt: 'painting by Vincent van Gogh: THICK SWIRLING IMPASTO brushstrokes visible throughout, VIBRANT INTENSE emotional colors (cobalt blue, chrome yellow, emerald green), dynamic energetic turbulent sky and background, Starry Night style spiraling movement, passionate expressive emotional power, NOT photographic preserve subject identity, Van Gogh masterpiece quality'
   },
   
@@ -2044,6 +2045,7 @@ const fallbackPrompts = {
     name: '클림트',
     artist: 'Gustav Klimt (1862-1918)',
     movement: '아르누보 (Art Nouveau)',
+    defaultWork: 'The Kiss',
     prompt: 'painting by Gustav Klimt Golden Phase: GOLD LEAF decorative patterns throughout background, Byzantine mosaic geometric ornaments, The Kiss style intimate sensuous atmosphere, jewel-like rich colors (gold, bronze, deep reds), flowing organic Art Nouveau lines, symbolic decorative elements, NOT photographic preserve subject identity, Klimt masterpiece quality'
   },
   
@@ -2051,6 +2053,7 @@ const fallbackPrompts = {
     name: '뭉크',
     artist: 'Edvard Munch (1863-1944)',
     movement: '표현주의 (Expressionism)',
+    defaultWork: 'The Scream',
     prompt: 'painting by Edvard Munch: INTENSE PSYCHOLOGICAL emotional depth, The Scream style existential anxiety atmosphere, WAVY DISTORTED flowing lines in background, haunting symbolic colors (blood red sky, sickly yellows, deep blues), raw emotional vulnerability exposed, NOT photographic preserve subject identity, Munch Expressionist masterpiece quality'
   },
   
@@ -2058,6 +2061,7 @@ const fallbackPrompts = {
     name: '마티스',
     artist: 'Henri Matisse (1869-1954)',
     movement: '야수파 (Fauvism)',
+    defaultWork: 'The Dance',
     prompt: 'painting by Henri Matisse Fauvist period: PURE BOLD UNMIXED COLORS in flat decorative areas, The Dance style simplified joyful forms, complete liberation of color from reality, saturated intense primary colors (red blue green), rhythmic flowing harmonious lines, life-affirming energetic atmosphere, NOT photographic preserve subject identity, Matisse Fauvist masterpiece quality'
   },
   
@@ -2065,6 +2069,7 @@ const fallbackPrompts = {
     name: '피카소',
     artist: 'Pablo Picasso (1881-1973)',
     movement: '입체주의 (Cubism)',
+    defaultWork: 'Les Demoiselles d\'Avignon',
     prompt: 'Cubist painting by Pablo Picasso: GEOMETRIC FRAGMENTED forms broken into angular planes, MULTIPLE SIMULTANEOUS PERSPECTIVES showing different angles at once, Les Demoiselles d Avignon style revolutionary deconstruction, monochromatic or limited earth palette, analytical cubist dissection of form, NOT photographic preserve subject identity, Picasso Cubist masterpiece quality'
   },
   
@@ -2072,6 +2077,7 @@ const fallbackPrompts = {
     name: '프리다 칼로',
     artist: 'Frida Kahlo (1907-1954)',
     movement: '멕시코 초현실주의 (Mexican Surrealism)',
+    defaultWork: 'Me and My Parrots',
     prompt: 'painting by Frida Kahlo: INTENSE DIRECT GAZE portrait style, vibrant Mexican folk art colors, symbolic personal imagery (flowers, animals, vines, hearts), unibrow and distinctive bold features, emotional raw vulnerability, Tehuana traditional Mexican dress and floral headpiece, lush tropical foliage background, autobiographical symbolic elements, rich saturated colors, NOT photographic, Frida Kahlo masterpiece quality'
   },
   
@@ -2079,6 +2085,7 @@ const fallbackPrompts = {
     name: '앤디 워홀',
     artist: 'Andy Warhol (1928-1987)',
     movement: '팝아트 (Pop Art)',
+    defaultWork: 'Marilyn Monroe',
     prompt: 'Pop Art by Andy Warhol: MUST create 2x2 FOUR-PANEL GRID layout, the EXACT SAME PERSON or OBJECT from the ORIGINAL PHOTO repeated 4 times - once in each quadrant, each of the 4 panels with DIFFERENT BOLD COLOR scheme (hot pink cyan yellow orange electric blue lime green), HIGH CONTRAST silkscreen printing effect, FLAT graphic colors with NO gradients, DO NOT draw Marilyn Monroe - draw only the person from the original photo, Warhol Pop Art masterpiece quality'
   },
   
@@ -3989,6 +3996,7 @@ export default async function handler(req, res) {
         
         finalPrompt = fallback.prompt;
         selectedArtist = fallback.name;
+        selectedWork = fallback.defaultWork || null;  // 거장 기본 작품
         selectionMethod = 'fallback';
         selectionDetails = {
           ai_error: aiResult.error
@@ -4026,6 +4034,7 @@ export default async function handler(req, res) {
       
       finalPrompt = fallback.prompt;
       selectedArtist = fallback.name;
+      selectedWork = fallback.defaultWork || null;  // 거장 기본 작품
       selectionMethod = 'fallback_no_key';
       
       // Renaissance fallback (no key)도 control_strength 0.65
