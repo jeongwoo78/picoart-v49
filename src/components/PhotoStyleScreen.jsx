@@ -1,11 +1,12 @@
 // PhotoStyleScreen.jsx - 사진 업로드 + 세부 스타일 선택 통합 화면
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
   const fileInputRef = useRef(null);
   const [photo, setPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [dragActive, setDragActive] = useState(false);
+  const [selectedStyle, setSelectedStyle] = useState(null);  // 선택된 스타일 상태
 
   // 카테고리별 데이터 (스타일 목록의 유일한 소스)
   const categoryData = {
@@ -76,6 +77,29 @@ const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
 
   const currentCategory = categoryData[mainCategory];
 
+  // 사진 + 스타일 둘 다 선택되면 자동 변환 시작
+  useEffect(() => {
+    if (photo && selectedStyle) {
+      onSelect(photo, selectedStyle);
+    }
+  }, [photo, selectedStyle]);
+
+  // 안내 메시지 생성
+  const getGuideMessage = () => {
+    if (photo && selectedStyle) return null; // 둘 다 있으면 메시지 없음
+    if (photo && !selectedStyle) {
+      // 사진만 있음 → 스타일 선택 안내
+      if (mainCategory === 'movements') return '🎨 미술사조를 선택하세요';
+      if (mainCategory === 'masters') return '🎨 거장을 선택하세요';
+      if (mainCategory === 'oriental') return '🎨 동양화 스타일을 선택하세요';
+    }
+    if (!photo && selectedStyle) {
+      // 스타일만 있음 → 사진 업로드 안내
+      return '📷 사진을 업로드하세요';
+    }
+    return null; // 둘 다 없으면 기본 상태
+  };
+
   // 드래그 핸들러
   const handleDrag = (e) => {
     e.preventDefault();
@@ -120,23 +144,14 @@ const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
     fileInputRef.current?.click();
   };
 
-  // 스타일 선택
+  // 스타일 선택 (상태만 저장, useEffect에서 자동 변환)
   const handleStyleSelect = (style) => {
-    if (!photo) {
-      alert('먼저 사진을 선택해주세요!');
-      return;
-    }
-    onSelect(photo, { ...style, category: mainCategory });
+    setSelectedStyle({ ...style, category: mainCategory });
   };
 
-  // 전체 변환 선택
+  // 전체 변환 선택 (상태만 저장, useEffect에서 자동 변환)
   const handleFullTransform = () => {
-    if (!photo) {
-      alert('먼저 사진을 선택해주세요!');
-      return;
-    }
-    // 스타일 배열을 함께 전달 (ProcessingScreen이 styleData 몰라도 됨)
-    onSelect(photo, {
+    setSelectedStyle({
       ...currentCategory.fullTransform,
       styles: currentCategory.styles.map(s => ({ ...s, category: mainCategory }))
     });
@@ -152,6 +167,13 @@ const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
           <span>{currentCategory.name}</span>
         </div>
       </div>
+
+      {/* 안내 메시지 */}
+      {getGuideMessage() && (
+        <div className="guide-message">
+          {getGuideMessage()}
+        </div>
+      )}
 
       {/* 사진 업로드 영역 */}
       <div className="photo-section">
@@ -193,7 +215,7 @@ const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
 
         {/* 전체 변환 버튼 */}
         <button 
-          className="full-transform-btn"
+          className={`full-transform-btn ${selectedStyle?.isFullTransform ? 'selected' : ''}`}
           onClick={handleFullTransform}
         >
           <span className="ft-icon">✨</span>
@@ -201,6 +223,7 @@ const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
             <span className="ft-title">전체 변환</span>
             <span className="ft-desc">{currentCategory.fullTransform.desc}</span>
           </div>
+          {selectedStyle?.isFullTransform && <span className="selected-check">✓</span>}
         </button>
 
         {/* 개별 스타일 그리드 */}
@@ -208,12 +231,13 @@ const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
           {currentCategory.styles.map(style => (
             <button
               key={style.id}
-              className="style-card"
+              className={`style-card ${selectedStyle?.id === style.id ? 'selected' : ''}`}
               onClick={() => handleStyleSelect(style)}
             >
               <span className="style-icon">{style.icon}</span>
               <span className="style-name">{style.name}</span>
               <span className="style-period">{style.period}</span>
+              {selectedStyle?.id === style.id && <span className="selected-check">✓</span>}
             </button>
           ))}
         </div>
@@ -231,6 +255,25 @@ const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1rem;
+        }
+
+        /* 안내 메시지 */
+        .guide-message {
+          background: rgba(255, 255, 255, 0.95);
+          color: #667eea;
+          padding: 12px 20px;
+          border-radius: 12px;
+          text-align: center;
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.02); }
         }
 
         .back-btn {
@@ -365,6 +408,7 @@ const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
           gap: 1rem;
           transition: all 0.3s;
           box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+          position: relative;
         }
 
         .full-transform-btn:hover {
@@ -412,12 +456,40 @@ const PhotoStyleScreen = ({ mainCategory, onBack, onSelect }) => {
           flex-direction: column;
           align-items: center;
           gap: 0.4rem;
+          position: relative;
         }
 
         .style-card:hover {
           border-color: #667eea;
           transform: translateY(-3px);
           box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .style-card.selected {
+          border-color: #667eea;
+          background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .full-transform-btn.selected {
+          border: 3px solid #ffd700;
+          box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .selected-check {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          background: #667eea;
+          color: white;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          font-weight: bold;
         }
 
         .style-icon {
