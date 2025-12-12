@@ -1469,8 +1469,11 @@ const ResultScreen = ({
 
   // ========== Fallback 메시지 ==========
   const getFallbackMessage = () => {
-    const category = selectedStyle.category;
-    const styleName = displayArtist || selectedStyle.name;
+    // 원클릭인 경우 currentResult에서 정보 가져오기
+    const category = isFullTransform ? currentResult?.style?.category : selectedStyle?.category;
+    const styleName = isFullTransform 
+      ? (currentResult?.aiSelectedArtist || currentResult?.style?.name)
+      : (displayArtist || selectedStyle?.name);
     
     if (category === 'masters') {
       return `이 작품은 거장 ${styleName}의 스타일로 변환되었습니다.`;
