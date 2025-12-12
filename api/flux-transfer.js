@@ -2306,10 +2306,10 @@ Return ONLY valid JSON (no markdown):
   "selected_artist": "Korean Minhwa" or "Korean Pungsokdo" or "Korean Jingyeong Landscape",
   "selected_style": "minhwa" or "pungsokdo" or "landscape",
   "reason": "why this style fits (1 sentence)",
-  "prompt": "[Gender rule if person] Authentic Korean [style name] from Joseon Dynasty with [style characteristics]... 🚨 CRITICAL TEXT RULES: ONLY Chinese hanzi (漢字) allowed, ABSOLUTELY ZERO Japanese hiragana katakana, ABSOLUTELY ZERO Korean Hangul, NO phonetic scripts, ONLY classical Chinese characters (漢字) or NO TEXT AT ALL, this is 100% PURE KOREAN ART"
+  "prompt": "KEEP UNDER 150 WORDS. [Gender rule] Korean [style] with key characteristics. 🚨 TEXT: Only 漢字 allowed, NO hiragana/katakana/Hangul"
 }
 
-Keep it concise and accurate.`;
+CRITICAL: Keep prompt field UNDER 150 WORDS to avoid truncation.`;
       }
       
       if (styleId === 'chinese') {
@@ -2378,10 +2378,10 @@ Return ONLY valid JSON (no markdown):
   "selected_artist": "Chinese Ink Wash" or "Chinese Gongbi" or "Chinese Huaniao",
   "selected_style": "ink_wash" or "gongbi" or "huaniao",
   "reason": "why this style fits (1 sentence)",
-  "prompt": "[Gender rule if person] Chinese [style name] painting with [style characteristics]... 🚨 CRITICAL TEXT RULES: ONLY Chinese hanzi (漢字) allowed if any text needed, ABSOLUTELY ZERO Japanese hiragana (あいうえお - curved flowing scripts FORBIDDEN), ABSOLUTELY ZERO Japanese katakana (アイウエオ - angular sharp scripts FORBIDDEN), NO Japanese text of any kind, NO vertical Japanese writing, if uncertain about text just LEAVE BLANK EMPTY SPACE instead, this is 100% PURE CHINESE ART"
+  "prompt": "KEEP UNDER 150 WORDS. [Gender rule] Chinese [style] with key characteristics. 🚨 TEXT: Only 漢字 allowed, NO hiragana/katakana"
 }
 
-Keep it concise and accurate.`;
+CRITICAL: Keep prompt field UNDER 150 WORDS to avoid truncation.`;
       }
       
       if (styleId === 'japanese') {
@@ -2584,7 +2584,7 @@ Return JSON only:
       signal: controller.signal,
       body: JSON.stringify({
         model: 'claude-sonnet-4-5',  // Claude Sonnet 4.5 (최신)
-        max_tokens: 500,
+        max_tokens: 1000,  // 500 → 1000 (JSON 잘림 방지)
         messages: [{
           role: 'user',
           content: [
