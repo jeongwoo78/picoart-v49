@@ -21,7 +21,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Prediction ID required' });
     }
 
-    const response = await fetch(`https://api.replicate.com/v1/predictions/${id}`, {
+    // WHATWG URL API 사용 (url.parse() deprecation 경고 방지)
+    const apiUrl = new URL(`https://api.replicate.com/v1/predictions/${id}`);
+    
+    const response = await fetch(apiUrl.href, {
       headers: {
         'Authorization': `Token ${process.env.REPLICATE_API_KEY}`
       }
