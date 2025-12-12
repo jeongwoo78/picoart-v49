@@ -101,7 +101,13 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
           success: true
         };
       } else {
-        return { style, error: result.error, success: false };
+        return { 
+          style, 
+          error: result.error, 
+          aiSelectedArtist: result.aiSelectedArtist,  // 실패해도 보존
+          selected_work: result.selected_work,
+          success: false 
+        };
       }
     } catch (err) {
       return { style, error: err.message, success: false };

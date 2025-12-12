@@ -160,7 +160,14 @@ export const processStyleTransfer = async (photoFile, selectedStyle, apiKey, onP
       details: prediction.selection_details || null
     };
 
-    const result = await pollPrediction(prediction.id, modelConfig, onProgress);
+    // ========== 이미 완료된 응답인 경우 polling 건너뛰기 ==========
+    let result;
+    if (prediction.status === 'succeeded' && prediction.output) {
+      console.log('✅ Already completed (Prefer: wait mode)');
+      result = prediction;
+    } else {
+      result = await pollPrediction(prediction.id, modelConfig, onProgress);
+    }
 
     console.log('');
     console.log('========================================');
