@@ -49,9 +49,9 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
         setCompletedCount(i + 1);
         setCompletedResults([...results]);
         
-        // API 부하 방지: 각 변환 후 1초 딜레이 (마지막 제외)
+        // API 부하 방지: 각 변환 후 2초 딜레이 (마지막 제외)
         if (i < styles.length - 1) {
-          await sleep(1000);
+          await sleep(2000);
         }
       }
       
