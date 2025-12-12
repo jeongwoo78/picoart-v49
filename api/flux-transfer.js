@@ -2094,12 +2094,12 @@ const fallbackPrompts = {
   // ========================================
   korean: {
     name: '한국 전통화',
-    prompt: 'Korean traditional painting in authentic Joseon Dynasty style. CRITICAL INSTRUCTIONS: 1) GENDER PRESERVATION - carefully preserve exact gender and facial features from original photo (male stays male with masculine face, female stays female with feminine features), 2) Choose appropriate Korean style: [Minhwa folk art for animals/flowers: light subtle Obangsaek colors NOT overly saturated, soft gentle pigments, cheerful but restrained palette] [Pungsokdo genre painting for people/daily life: LIGHT INK WASH technique (damchae), subtle delicate colors over ink lines, refined elegant brushwork, realistic but understated, Kim Hong-do and Shin Yun-bok style NOT animation NOT cartoon, restrained muted tones] [Jingyeong landscape for nature/mountains: expressive ink with minimal color], 3) SINGLE UNIFIED COMPOSITION - all figures together in one cohesive scene. 🚨🚨🚨 ABSOLUTE TEXT RULES - HIGHEST PRIORITY 🚨🚨🚨: ONLY Chinese hanzi (漢字 - complex balanced square characters like 山水花鳥) allowed for seals and inscriptions, ABSOLUTELY ZERO Japanese hiragana (あいうえお - curved flowing shapes FORBIDDEN), ABSOLUTELY ZERO Japanese katakana (アイウエオ - angular sharp shapes FORBIDDEN), ABSOLUTELY ZERO Korean Hangul (한글 - geometric block shapes like ㅎㅏㄴ글 FORBIDDEN), NO phonetic scripts of any kind, ONLY classical Chinese characters (漢字) or NO TEXT AT ALL, this is 100% PURE KOREAN ART'
+    prompt: 'Korean traditional painting in authentic Joseon Dynasty style. CRITICAL INSTRUCTIONS: 1) GENDER PRESERVATION - preserve exact gender and facial features from original photo, 2) Choose appropriate Korean style: [Minhwa folk art for animals/flowers: light subtle Obangsaek colors, soft gentle pigments] [Pungsokdo genre painting for people: LIGHT INK WASH technique, subtle colors over ink lines, Kim Hong-do and Shin Yun-bok style] [Jingyeong landscape for nature: expressive ink with minimal color], 3) SINGLE UNIFIED COMPOSITION. 🚨 NO TEXT ON PAINTING - leave all areas completely blank, no characters, no writing, no seals, no inscriptions, PURE VISUAL ART ONLY'
   },
   
   chinese: {
     name: '중국 전통화',
-    prompt: 'Chinese traditional painting in authentic classical style. CRITICAL INSTRUCTIONS: 1) GENDER PRESERVATION - carefully preserve exact gender and facial features from original photo (male stays male with masculine face, female stays female with feminine features), 2) Choose appropriate Chinese style based on photo subject (Shuimohua ink wash for landscapes/nature with monochrome gradations, Gongbi meticulous painting for people/portraits with fine detailed brushwork and rich colors, Huaniao bird-and-flower for animals/plants with precise naturalistic rendering), 3) Use Chinese aesthetic principles, 4) SINGLE UNIFIED COMPOSITION - all figures and elements together in one cohesive continuous scene. 🚨🚨🚨 ABSOLUTE TEXT RULES - HIGHEST PRIORITY 🚨🚨🚨: ONLY Chinese hanzi (漢字 - complex balanced square characters like 山水花鳥) allowed for seals and inscriptions, ABSOLUTELY ZERO Japanese hiragana (あいうえお - curved flowing shapes FORBIDDEN), ABSOLUTELY ZERO Japanese katakana (アイウエオ - angular sharp shapes FORBIDDEN), NO phonetic scripts of any kind, ONLY classical Chinese characters (漢字) or NO TEXT AT ALL, this is 100% PURE CHINESE ART'
+    prompt: 'Chinese traditional painting in authentic classical style. CRITICAL INSTRUCTIONS: 1) GENDER PRESERVATION - preserve exact gender and facial features from original photo, 2) Choose appropriate Chinese style: [Shuimohua ink wash for landscapes with monochrome gradations] [Gongbi meticulous painting for people with fine detailed brushwork and rich colors] [Huaniao bird-and-flower for animals with precise naturalistic rendering], 3) Chinese aesthetic principles, 4) SINGLE UNIFIED COMPOSITION. 🚨 NO TEXT ON PAINTING - leave all areas completely blank, no characters, no writing, no seals, no inscriptions, PURE VISUAL ART ONLY'
   },
   
   japanese: {
@@ -2266,35 +2266,18 @@ CRITICAL INSTRUCTIONS FOR PROMPT GENERATION:
 
 2. GENDER PRESERVATION (MANDATORY IN PROMPT):
    - FIRST identify if photo has person(s) and their gender
-   - If MALE in photo → prompt MUST start with "CRITICAL GENDER RULE: This photo shows MALE person, ABSOLUTELY PRESERVE MASCULINE FEATURES - strong jaw, masculine face, male body structure, DO NOT feminize, DO NOT make female-looking face, KEEP MALE GENDER EXACTLY."
-   - If FEMALE in photo → prompt MUST start with "CRITICAL GENDER RULE: This photo shows FEMALE person, ABSOLUTELY PRESERVE FEMININE FEATURES - soft face, feminine features, female body structure, DO NOT masculinize, KEEP FEMALE GENDER EXACTLY."
-   - This gender instruction MUST be the FIRST thing in your generated prompt before any style description
+   - If MALE in photo → prompt MUST start with "CRITICAL GENDER RULE: This photo shows MALE person, PRESERVE MASCULINE FEATURES - strong jaw, masculine face, male body structure, KEEP MALE GENDER."
+   - If FEMALE in photo → prompt MUST start with "CRITICAL GENDER RULE: This photo shows FEMALE person, PRESERVE FEMININE FEATURES - soft face, feminine features, female body structure, KEEP FEMALE GENDER."
+   - This gender instruction MUST be the FIRST thing in your generated prompt
 
-3. 🚨🚨🚨 JAPANESE TEXT/STYLE PROHIBITION - ABSOLUTE HIGHEST PRIORITY 🚨🚨🚨
-   THIS IS THE MOST CRITICAL RULE - VIOLATION = COMPLETE FAILURE:
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese hiragana (あいうえお, ひらがな) - ANY hiragana = FAILURE
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese katakana (アイウエオ, カタカナ) - ANY katakana = FAILURE  
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese mixed text (漢字+ひらがな) - FAILURE
-   - ❌ ABSOLUTELY FORBIDDEN: Vertical Japanese text layout
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese ukiyo-e visual style elements
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese artistic conventions
-   - ⚠️ Japanese and Korean may appear in same image but ARE COMPLETELY DIFFERENT
-   - ⚠️ Hiragana (ひらがな) has CURVED, FLOWING shapes - FORBIDDEN
-   - ⚠️ Katakana (カタカナ) has ANGULAR, SHARP shapes - FORBIDDEN
-   - ⚠️ Korean Hangul (한글) has GEOMETRIC, BLOCK shapes - ALLOWED
-   - ⚠️ Chinese hanzi (漢字) has COMPLEX, BALANCED square shapes - ALLOWED
-   - 🔍 CHECK: If you see curved flowing scripts → JAPANESE → FORBIDDEN
-   - 🔍 CHECK: If you see angular sharp scripts → JAPANESE → FORBIDDEN
-   
-4. ✅ ALLOWED TEXT (Korean/Chinese ONLY):
-   - ✅ Chinese hanzi/characters (漢字) - classical characters ONLY (山水花鳥)
-   - ❌ Korean Hangul (한글) - FORBIDDEN (가나다라 - phonetic script)
-   - ❌ Japanese hiragana (ひらがな) - FORBIDDEN
-   - ❌ Japanese katakana (カタカナ) - FORBIDDEN
-   - ⚠️ SAFEST: NO TEXT AT ALL - clean painting without any writing
+3. TEXT RULE - CRITICAL:
+   - NO TEXT ON PAINTING AT ALL
+   - Leave blank where text would go
+   - No characters, no seals, no inscriptions
+   - PURE VISUAL ART ONLY
 
 5. PROMPT MUST INCLUDE THIS EXACT ENDING:
-   "🚨 CRITICAL TEXT RULES: ONLY Chinese hanzi (漢字 - complex square characters like 山水花鳥) allowed, ABSOLUTELY ZERO Japanese hiragana (あいうえお FORBIDDEN), ABSOLUTELY ZERO Japanese katakana (アイウエオ FORBIDDEN), ABSOLUTELY ZERO Korean Hangul (한글 FORBIDDEN), NO phonetic scripts, ONLY classical Chinese characters (漢字) or NO TEXT AT ALL, this is 100% PURE KOREAN ART"
+   "🚨 NO TEXT ON PAINTING - leave all areas completely blank, no characters, no writing, no seals, PURE VISUAL ART ONLY"
 
 Return ONLY valid JSON (no markdown):
 {
@@ -2306,7 +2289,7 @@ Return ONLY valid JSON (no markdown):
   "selected_artist": "Korean Minhwa" or "Korean Pungsokdo" or "Korean Jingyeong Landscape",
   "selected_style": "minhwa" or "pungsokdo" or "landscape",
   "reason": "why this style fits (1 sentence)",
-  "prompt": "KEEP UNDER 150 WORDS. [Gender rule] Korean [style] with key characteristics. 🚨 TEXT: Only 漢字 allowed, NO hiragana/katakana/Hangul"
+  "prompt": "KEEP UNDER 150 WORDS. [Gender rule] Korean [style] with key characteristics. 🚨 NO TEXT ON PAINTING - completely blank, PURE VISUAL ART ONLY"
 }
 
 CRITICAL: Keep prompt field UNDER 150 WORDS to avoid truncation.`;
@@ -2339,34 +2322,18 @@ CRITICAL INSTRUCTIONS FOR PROMPT GENERATION:
 
 1. GENDER PRESERVATION (MANDATORY IN PROMPT):
    - FIRST identify if photo has person(s) and their gender
-   - If MALE in photo → prompt MUST start with "CRITICAL GENDER RULE: This photo shows MALE person, ABSOLUTELY PRESERVE MASCULINE FEATURES - strong jaw, masculine face, male body structure, DO NOT feminize, DO NOT make female-looking face, KEEP MALE GENDER EXACTLY."
-   - If FEMALE in photo → prompt MUST start with "CRITICAL GENDER RULE: This photo shows FEMALE person, ABSOLUTELY PRESERVE FEMININE FEATURES - soft face, feminine features, female body structure, DO NOT masculinize, KEEP FEMALE GENDER EXACTLY."
-   - This gender instruction MUST be the FIRST thing in your generated prompt before any style description
+   - If MALE in photo → prompt MUST start with "CRITICAL GENDER RULE: This photo shows MALE person, PRESERVE MASCULINE FEATURES - strong jaw, masculine face, male body structure, KEEP MALE GENDER."
+   - If FEMALE in photo → prompt MUST start with "CRITICAL GENDER RULE: This photo shows FEMALE person, PRESERVE FEMININE FEATURES - soft face, feminine features, female body structure, KEEP FEMALE GENDER."
+   - This gender instruction MUST be the FIRST thing in your generated prompt
 
-2. 🚨🚨🚨 JAPANESE TEXT/STYLE PROHIBITION - ABSOLUTE HIGHEST PRIORITY 🚨🚨🚨
-   THIS IS THE MOST CRITICAL RULE - VIOLATION = COMPLETE FAILURE:
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese hiragana (あいうえお, ひらがな) - ANY hiragana = FAILURE
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese katakana (アイウエオ, カタカナ) - ANY katakana = FAILURE  
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese mixed text (漢字+ひらがな) - FAILURE
-   - ❌ ABSOLUTELY FORBIDDEN: Vertical Japanese text layout
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese ukiyo-e visual style elements
-   - ❌ ABSOLUTELY FORBIDDEN: Japanese artistic conventions
-   - ⚠️ Japanese and Chinese may LOOK similar but ARE COMPLETELY DIFFERENT
-   - ⚠️ Hiragana (ひらがな) has CURVED, FLOWING shapes - FORBIDDEN
-   - ⚠️ Katakana (カタカナ) has ANGULAR, SHARP shapes - FORBIDDEN
-   - ⚠️ Chinese hanzi (漢字) has COMPLEX, BALANCED square shapes - ALLOWED
-   - 🔍 CHECK: If you see curved flowing scripts → JAPANESE → FORBIDDEN
-   - 🔍 CHECK: If you see angular sharp scripts → JAPANESE → FORBIDDEN
-   
-3. ✅ ALLOWED TEXT (Chinese ONLY):
-   - ✅ Chinese hanzi/characters (漢字) - traditional seal script, clerical script
-   - ✅ Chinese calligraphy with brush - in corners as artist signature/seal (落款)
-   - ✅ Red seal stamps (印章) with Chinese characters
-   - ✅ Classical Chinese poetry inscriptions
-   - ⚠️ BUT PREFER: NO TEXT AT ALL - clean painting without any writing is SAFEST
+2. TEXT RULE - CRITICAL:
+   - NO TEXT ON PAINTING AT ALL
+   - Leave blank where text would go
+   - No characters, no seals, no inscriptions
+   - PURE VISUAL ART ONLY
 
-4. PROMPT MUST INCLUDE THIS EXACT ENDING:
-   "🚨 CRITICAL TEXT RULES: ONLY Chinese hanzi (漢字) allowed if any text needed, ABSOLUTELY ZERO Japanese hiragana (あいうえお - curved flowing scripts FORBIDDEN), ABSOLUTELY ZERO Japanese katakana (アイウエオ - angular sharp scripts FORBIDDEN), NO Japanese text of any kind, NO vertical Japanese writing, if uncertain about text just LEAVE BLANK EMPTY SPACE instead, this is 100% PURE CHINESE ART"
+3. PROMPT MUST INCLUDE THIS EXACT ENDING:
+   "🚨 NO TEXT ON PAINTING - leave all areas completely blank, no characters, no writing, no seals, PURE VISUAL ART ONLY"
 
 Return ONLY valid JSON (no markdown):
 {
@@ -2378,7 +2345,7 @@ Return ONLY valid JSON (no markdown):
   "selected_artist": "Chinese Ink Wash" or "Chinese Gongbi" or "Chinese Huaniao",
   "selected_style": "ink_wash" or "gongbi" or "huaniao",
   "reason": "why this style fits (1 sentence)",
-  "prompt": "KEEP UNDER 150 WORDS. [Gender rule] Chinese [style] with key characteristics. 🚨 TEXT: Only 漢字 allowed, NO hiragana/katakana"
+  "prompt": "KEEP UNDER 150 WORDS. [Gender rule] Chinese [style] with key characteristics. 🚨 NO TEXT ON PAINTING - completely blank, PURE VISUAL ART ONLY"
 }
 
 CRITICAL: Keep prompt field UNDER 150 WORDS to avoid truncation.`;
@@ -4087,9 +4054,9 @@ export default async function handler(req, res) {
       paintingEnforcement = ', CRITICAL: NOT photographic NOT photo-realistic, POINTILLIST painting style with TINY COLORED DOTS only, ABSOLUTELY NO brushstrokes NO brush texture NO oil painting strokes, entire image composed of small distinct points of pure unmixed color placed side by side, visible dot pattern throughout like Signac or Seurat, APPLY POINTILLIST DOT STYLE TO ENTIRE IMAGE INCLUDING ALL PEOPLE (people must also be rendered in dots NOT photographic), preserve facial IDENTITY but render entirely in colored dots, PRESERVE GENDER accurately, unified composition all figures together';
       console.log('ℹ️ Pointillism mode: tiny dots only, NO brushstrokes');
     } else if (isOrientalArt) {
-      // 동양 미술: brushstrokes 포함 + 한자만 허용 (일본어/한글 금지)
-      paintingEnforcement = ', CRITICAL: NOT photographic NOT photo-realistic, APPLY PAINTING STYLE TO ENTIRE IMAGE INCLUDING ALL PEOPLE (people must look painted NOT photographic), fully oil painting with thick visible brushstrokes and canvas texture, preserve facial IDENTITY but render in painting style, PRESERVE GENDER accurately (male stays male with masculine features, female stays female with feminine features), unified composition all figures together, 🚨 TEXT RULES: ONLY Chinese hanzi (漢字 - square characters like 山水花鳥) allowed, ABSOLUTELY NO Japanese hiragana (ひらがな) katakana (カタカナ), ABSOLUTELY NO Korean Hangul (한글), NO phonetic scripts of any kind, ONLY classical Chinese characters or COMPLETELY BLANK, this is 100% PURE KOREAN or CHINESE TRADITIONAL ART';
-      console.log('ℹ️ Oriental art mode: paintingEnforcement WITH hanzi-only rule');
+      // 동양 미술: brushstrokes 포함 + 텍스트 완전 금지
+      paintingEnforcement = ', CRITICAL: NOT photographic NOT photo-realistic, APPLY PAINTING STYLE TO ENTIRE IMAGE INCLUDING ALL PEOPLE (people must look painted NOT photographic), traditional brush painting with visible brushstrokes, preserve facial IDENTITY but render in painting style, PRESERVE GENDER accurately (male stays male with masculine features, female stays female with feminine features), unified composition all figures together, 🚨 NO TEXT ON PAINTING - leave all areas completely blank, no characters, no writing, no seals, PURE VISUAL ART ONLY';
+      console.log('ℹ️ Oriental art mode: paintingEnforcement WITH no-text rule');
     } else {
       // 일반: brushstrokes 포함
       paintingEnforcement = ', CRITICAL: NOT photographic NOT photo-realistic, APPLY PAINTING STYLE TO ENTIRE IMAGE INCLUDING ALL PEOPLE (people must look painted NOT photographic), fully oil painting with thick visible brushstrokes and canvas texture, preserve facial IDENTITY but render in painting style, PRESERVE GENDER accurately (male stays male with masculine features, female stays female with feminine features), unified composition all figures together';
