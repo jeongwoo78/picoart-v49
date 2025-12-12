@@ -659,9 +659,6 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
         {/* 헤더 */}
         <div className="header">
           <h2>{isFullTransform ? '✨ 전체 변환' : '🎨 변환 중'}</h2>
-          {isFullTransform && viewIndex >= 0 && (
-            <button className="back-btn" onClick={handleBackToEducation}>← 교육자료</button>
-          )}
         </div>
 
         {/* 상태 */}

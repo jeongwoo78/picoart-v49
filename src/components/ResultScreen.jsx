@@ -1469,7 +1469,17 @@ const ResultScreen = ({
 
   // ========== Fallback 메시지 ==========
   const getFallbackMessage = () => {
-    return `이 작품은 ${selectedStyle.name} 스타일로 변환되었습니다.`;
+    const category = selectedStyle.category;
+    const styleName = displayArtist || selectedStyle.name;
+    
+    if (category === 'masters') {
+      return `이 작품은 거장 ${styleName}의 스타일로 변환되었습니다.`;
+    } else if (category === 'oriental') {
+      return `이 작품은 ${styleName} 스타일로 변환되었습니다.`;
+    } else {
+      // movements (미술사조)
+      return `이 작품은 ${styleName} 스타일로 변환되었습니다.`;
+    }
   };
 
 
@@ -1531,13 +1541,13 @@ const ResultScreen = ({
 
   // ========== 스와이프 핸들러 (원클릭) ==========
   const handleTouchStart = (e) => {
-    if (!isFullTransform || isRetrying) return;
+    if (!isFullTransform) return;
     setTouchStartX(e.touches[0].clientX);
     setTouchStartY(e.touches[0].clientY);
   };
 
   const handleTouchEnd = (e) => {
-    if (!isFullTransform || isRetrying || !touchStartX) return;
+    if (!isFullTransform || !touchStartX) return;
     const diffX = touchStartX - e.changedTouches[0].clientX;
     const diffY = touchStartY - e.changedTouches[0].clientY;
     
@@ -1686,7 +1696,7 @@ const ResultScreen = ({
           <div className="fullTransform-nav">
             <button 
               onClick={() => setCurrentIndex(i => Math.max(0, i - 1))}
-              disabled={currentIndex === 0 || isRetrying}
+              disabled={currentIndex === 0}
               className="nav-btn"
             >
               ◀ 이전
@@ -1695,15 +1705,14 @@ const ResultScreen = ({
               {fullTransformResults.map((_, idx) => (
                 <button
                   key={idx}
-                  className={`nav-dot ${idx === currentIndex ? 'active' : ''} ${isRetrying ? 'disabled' : ''}`}
-                  onClick={() => !isRetrying && setCurrentIndex(idx)}
-                  disabled={isRetrying}
+                  className={`nav-dot ${idx === currentIndex ? 'active' : ''}`}
+                  onClick={() => setCurrentIndex(idx)}
                 />
               ))}
             </div>
             <button 
               onClick={() => setCurrentIndex(i => Math.min(fullTransformResults.length - 1, i + 1))}
-              disabled={currentIndex === fullTransformResults.length - 1 || isRetrying}
+              disabled={currentIndex === fullTransformResults.length - 1}
               className="nav-btn"
             >
               다음 ▶
