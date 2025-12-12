@@ -162,10 +162,14 @@ export const processStyleTransfer = async (photoFile, selectedStyle, apiKey, onP
 
     // ========== 이미 완료된 응답인 경우 polling 건너뛰기 ==========
     let result;
+    console.log('🔍 Checking prediction status:', prediction.status);
+    console.log('🔍 Has output:', !!prediction.output);
     if (prediction.status === 'succeeded' && prediction.output) {
       console.log('✅ Already completed (Prefer: wait mode)');
       result = prediction;
     } else {
+      console.log('⏳ Status not succeeded or no output, polling...');
+      console.log('   prediction.id:', prediction.id);
       result = await pollPrediction(prediction.id, modelConfig, onProgress);
     }
 
