@@ -380,6 +380,7 @@ const ResultScreen = ({
         // 고대
         'Greek Sculpture': 'ancient-greek-sculpture',
         'Ancient Greek Sculpture': 'ancient-greek-sculpture',
+        'Classical Sculpture': 'ancient-greek-sculpture',
         'Roman Mosaic': 'roman-mosaic',
         // 중세
         'Byzantine': 'byzantine',
@@ -1091,6 +1092,8 @@ const ResultScreen = ({
     if (!artistName) return '예술 스타일';
     
     const normalized = artistName.toLowerCase().trim();
+    console.log('🎨 formatArtistName input:', artistName);
+    console.log('🎨 formatArtistName normalized:', normalized);
     
     // 영문 이름 → 한글(Full Name) 매핑
     const nameMap = {
@@ -1106,7 +1109,9 @@ const ResultScreen = ({
       
       // 중세 미술
       'byzantine': '비잔틴(Byzantine)',
+      'byzantine mosaic': '비잔틴 모자이크(Byzantine Mosaic)',
       'gothic': '고딕(Gothic)',
+      'gothic stained glass': '고딕 스테인드글라스(Gothic Stained Glass)',
       'romanesque': '로마네스크(Romanesque)',
       'islamic miniature': '이슬람 세밀화(Islamic Miniature)',
       'islamic geometry': '이슬람 기하학(Islamic Geometry)',
@@ -1130,6 +1135,11 @@ const ResultScreen = ({
       // 로코코
       'watteau': '와토(Jean-Antoine Watteau)',
       'jean-antoine watteau': '와토(Jean-Antoine Watteau)',
+      'boucher': '부셰(François Boucher)',
+      'françois boucher': '부셰(François Boucher)',
+      'francois boucher': '부셰(François Boucher)',
+      'jean-honoré fragonard': '프라고나르(Jean-Honoré Fragonard)',
+      'jean-honore fragonard': '프라고나르(Jean-Honoré Fragonard)',
       'fragonard': '프라고나르(Jean-Honoré Fragonard)',
       
       // 신고전주의
@@ -1278,10 +1288,12 @@ const ResultScreen = ({
     
     // 매핑에서 찾기
     if (nameMap[normalized]) {
+      console.log('🎨 formatArtistName found:', nameMap[normalized]);
       return nameMap[normalized];
     }
     
     // 매핑에 없으면 원본 반환
+    console.log('🎨 formatArtistName NOT FOUND, returning original:', artistName);
     return artistName;
   };
 
@@ -1629,12 +1641,16 @@ const ResultScreen = ({
                 <p className="technique-subtitle">
                   <span className="artist-name">
                     {/* 거장: 작품명 표시, 동양화: 기법명 통일, 그 외: 화가명 */}
-                    {selectedStyle.category === 'masters' && displayWork
-                      ? formatWorkName(displayWork)
-                      : selectedStyle.category === 'oriental'
-                        ? formatOrientalStyle(displayArtist)
-                        : formatArtistName(displayArtist)
-                    }
+                    {(() => {
+                      const category = isFullTransform ? currentResult?.style?.category : selectedStyle.category;
+                      if (category === 'masters' && displayWork) {
+                        return formatWorkName(displayWork);
+                      } else if (category === 'oriental') {
+                        return formatOrientalStyle(displayArtist);
+                      } else {
+                        return formatArtistName(displayArtist);
+                      }
+                    })()}
                   </span>
                   {selectedStyle.id === 'neoclassicism_vs_romanticism_vs_realism' && aiSelectedArtist && (() => {
                     const movement = getSpecificMovement(aiSelectedArtist);
