@@ -4,7 +4,8 @@
   "version": "40.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "NODE_OPTIONS='--no-deprecation' vite",
+    "dev:debug": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -18,6 +19,6 @@
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.0.8"
+    "vite": "^6.0.3"
   }
 }
