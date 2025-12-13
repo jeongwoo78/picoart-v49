@@ -445,6 +445,29 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+/* Processing Screen 재시도 버튼 */
+.processing-screen .retry-section {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.processing-screen .btn-retry {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.processing-screen .btn-retry:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
 /* Result Screen */
 .result-screen {
   display: flex;

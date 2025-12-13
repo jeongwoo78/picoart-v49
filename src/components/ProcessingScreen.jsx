@@ -12,6 +12,10 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
   const [statusText, setStatusText] = useState('준비 중...');
   const [showEducation, setShowEducation] = useState(false);
   
+  // 단일 변환 실패/재시도 상태
+  const [singleFailed, setSingleFailed] = useState(false);
+  const [isRetrying, setIsRetrying] = useState(false);
+  
   // 원클릭 상태
   const [completedResults, setCompletedResults] = useState([]);
   const [completedCount, setCompletedCount] = useState(0);
@@ -77,7 +81,35 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
         onComplete(selectedStyle, result.resultUrl, result);
       } else {
         setStatusText(`오류: ${result.error}`);
+        setSingleFailed(true);
       }
+    }
+  };
+
+  // ========== 단일 변환 재시도 함수 ==========
+  const handleSingleRetry = async () => {
+    if (isRetrying) return;
+    
+    setIsRetrying(true);
+    setSingleFailed(false);
+    setStatusText('재변환 중...');
+    
+    try {
+      const result = await processSingleStyle(selectedStyle);
+      
+      if (result.success) {
+        setStatusText(`${result.aiSelectedArtist || selectedStyle.name} 화풍으로 변환 완료!`);
+        await sleep(1000);
+        onComplete(selectedStyle, result.resultUrl, result);
+      } else {
+        setStatusText(`오류: ${result.error}`);
+        setSingleFailed(true);
+      }
+    } catch (error) {
+      setStatusText(`오류: ${error.message}`);
+      setSingleFailed(true);
+    } finally {
+      setIsRetrying(false);
     }
   };
 
@@ -695,9 +727,21 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
 
         {/* 상태 */}
         <div className="status">
-          <div className="spinner"></div>
+          {!singleFailed && <div className="spinner"></div>}
           <p>{statusText}</p>
         </div>
+
+        {/* ===== 단일 변환 실패 시 재시도 버튼 ===== */}
+        {!isFullTransform && singleFailed && !isRetrying && (
+          <div className="retry-section">
+            <button 
+              className="btn-retry"
+              onClick={handleSingleRetry}
+            >
+              🔄 재시도
+            </button>
+          </div>
+        )}
 
         {/* ===== 원클릭 모드 ===== */}
         {isFullTransform && (
@@ -707,7 +751,7 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
               <div className="preview">
                 {/* 원본 사진 (결과 미리보기와 동일한 위치) */}
                 {photo && (
-                  <img src={photo} alt="원본 사진" className="original-photo" />
+                  <img src={URL.createObjectURL(photo)} alt="원본 사진" className="original-photo" />
                 )}
                 <div className="preview-info">
                   <div className="preview-style">내 사진</div>
