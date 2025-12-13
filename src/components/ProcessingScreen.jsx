@@ -801,7 +801,13 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
               </button>
               
               <div className="dots">
-                <button className={`dot edu ${viewIndex === -1 ? 'active' : ''}`} onClick={handleBackToEducation}>📚</button>
+                {/* 진행 상황 카운터 버튼 */}
+                <button 
+                  className={`dot progress-counter ${viewIndex === -1 ? 'active' : ''}`} 
+                  onClick={handleBackToEducation}
+                >
+                  {viewIndex === -1 ? `0/${totalCount}` : `${viewIndex + 1}/${totalCount}`}
+                </button>
                 {styles.map((_, idx) => (
                   <button 
                     key={idx}
@@ -810,7 +816,6 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
                     disabled={idx >= completedCount}
                   />
                 ))}
-                <span className="count">{viewIndex === -1 ? `📚` : `${viewIndex + 1}/${totalCount}`}</span>
               </div>
               
               <button 
@@ -951,13 +956,19 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
         .dot.done { background: #4CAF50; }
         .dot.active { transform: scale(1.4); box-shadow: 0 0 0 2px rgba(102,126,234,0.4); }
         .dot:disabled { opacity: 0.4; cursor: default; }
-        .dot.edu {
-          width: auto; padding: 4px 8px;
-          border-radius: 10px;
-          font-size: 12px;
+        .dot.progress-counter {
+          width: auto; 
+          padding: 6px 12px;
+          border-radius: 12px;
+          font-size: 13px;
+          font-weight: 600;
           background: #667eea;
+          color: white;
         }
-        .count { font-size: 12px; color: #999; margin-left: 8px; }
+        .dot.progress-counter.active {
+          background: #764ba2;
+          box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.4);
+        }
       `}</style>
     </div>
   );
