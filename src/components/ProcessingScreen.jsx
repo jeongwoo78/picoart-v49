@@ -702,19 +702,23 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
         {/* ===== 원클릭 모드 ===== */}
         {isFullTransform && (
           <>
-            {/* 1차 교육 */}
+            {/* 1차 교육 - 원본 사진 + 교육 콘텐츠 */}
             {viewIndex === -1 && showEducation && getPrimaryEducation() && (
-              <div className="edu-card primary">
-                {/* 원본 사진 표시 */}
+              <div className="preview">
+                {/* 원본 사진 (결과 미리보기와 동일한 위치) */}
                 {photo && (
-                  <div className="original-photo-preview">
-                    <img src={photo} alt="원본 사진" />
-                    <span className="photo-label">내 사진</span>
-                  </div>
+                  <img src={photo} alt="원본 사진" className="original-photo" />
                 )}
-                <h3>{getPrimaryEducation().title}</h3>
-                <p>{getPrimaryEducation().content}</p>
-                {completedCount > 0 && <p className="hint">👆 완료된 결과를 확인하세요</p>}
+                <div className="preview-info">
+                  <div className="preview-style">내 사진</div>
+                  <div className="preview-subtitle">변환 중...</div>
+                </div>
+                {/* 1차 교육 콘텐츠 */}
+                <div className="edu-card primary">
+                  <h3>{getPrimaryEducation().title}</h3>
+                  <p>{getPrimaryEducation().content}</p>
+                  {completedCount > 0 && <p className="hint">👆 완료된 결과를 확인하세요</p>}
+                </div>
               </div>
             )}
 
