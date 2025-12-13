@@ -9,9 +9,9 @@ import { orientalEducation } from '../data/educationContent';
 import { movementsEducation, movementsOverview } from '../data/movementsEducation';
 import { mastersEducation } from '../data/mastersEducation';
 // 원클릭 전용 교육자료 (분리된 파일)
-import { oneclickMovementsSecondary } from '../data/oneclickMovementsEducation';
-import { oneclickMastersSecondary } from '../data/oneclickMastersEducation';
-import { oneclickOrientalSecondary } from '../data/oneclickOrientalEducation';
+import { oneclickMovementsPrimary, oneclickMovementsSecondary } from '../data/oneclickMovementsEducation';
+import { oneclickMastersPrimary, oneclickMastersSecondary } from '../data/oneclickMastersEducation';
+import { oneclickOrientalPrimary, oneclickOrientalSecondary } from '../data/oneclickOrientalEducation';
 import { saveToGallery } from './GalleryScreen';
 import { processStyleTransfer } from '../utils/styleTransferAPI';
 
@@ -976,6 +976,124 @@ const ResultScreen = ({
 
 
   // ========== 거장 작품명 포맷 ==========
+  // ========== 원클릭 1차 교육 가져오기 ==========
+  const getPrimaryEducation = () => {
+    if (!isFullTransform || !selectedStyle) return null;
+    
+    const category = selectedStyle.category;
+    if (category === 'movements') {
+      return oneclickMovementsPrimary;
+    } else if (category === 'masters') {
+      return oneclickMastersPrimary;
+    } else if (category === 'oriental') {
+      return oneclickOrientalPrimary;
+    }
+    return null;
+  };
+
+  // ========== 거장 화가명 풀네임 + 화파 매핑 ==========
+  const getMasterInfo = (styleName) => {
+    const masterMap = {
+      '반 고흐': {
+        fullName: '빈센트 반 고흐(Vincent van Gogh)',
+        movement: '후기인상주의'
+      },
+      'vangogh': {
+        fullName: '빈센트 반 고흐(Vincent van Gogh)',
+        movement: '후기인상주의'
+      },
+      '빈센트 반 고흐': {
+        fullName: '빈센트 반 고흐(Vincent van Gogh)',
+        movement: '후기인상주의'
+      },
+      '클림트': {
+        fullName: '구스타프 클림트(Gustav Klimt)',
+        movement: '아르누보'
+      },
+      'klimt': {
+        fullName: '구스타프 클림트(Gustav Klimt)',
+        movement: '아르누보'
+      },
+      '구스타프 클림트': {
+        fullName: '구스타프 클림트(Gustav Klimt)',
+        movement: '아르누보'
+      },
+      '뭉크': {
+        fullName: '에드바르 뭉크(Edvard Munch)',
+        movement: '표현주의'
+      },
+      'munch': {
+        fullName: '에드바르 뭉크(Edvard Munch)',
+        movement: '표현주의'
+      },
+      '에드바르 뭉크': {
+        fullName: '에드바르 뭉크(Edvard Munch)',
+        movement: '표현주의'
+      },
+      '마티스': {
+        fullName: '앙리 마티스(Henri Matisse)',
+        movement: '야수파'
+      },
+      'matisse': {
+        fullName: '앙리 마티스(Henri Matisse)',
+        movement: '야수파'
+      },
+      '앙리 마티스': {
+        fullName: '앙리 마티스(Henri Matisse)',
+        movement: '야수파'
+      },
+      '피카소': {
+        fullName: '파블로 피카소(Pablo Picasso)',
+        movement: '입체주의'
+      },
+      'picasso': {
+        fullName: '파블로 피카소(Pablo Picasso)',
+        movement: '입체주의'
+      },
+      '파블로 피카소': {
+        fullName: '파블로 피카소(Pablo Picasso)',
+        movement: '입체주의'
+      },
+      '프리다 칼로': {
+        fullName: '프리다 칼로(Frida Kahlo)',
+        movement: '초현실주의'
+      },
+      'frida': {
+        fullName: '프리다 칼로(Frida Kahlo)',
+        movement: '초현실주의'
+      },
+      '워홀': {
+        fullName: '앤디 워홀(Andy Warhol)',
+        movement: '팝아트'
+      },
+      'warhol': {
+        fullName: '앤디 워홀(Andy Warhol)',
+        movement: '팝아트'
+      },
+      '앤디 워홀': {
+        fullName: '앤디 워홀(Andy Warhol)',
+        movement: '팝아트'
+      }
+    };
+    
+    if (!styleName) return { fullName: '거장', movement: '' };
+    
+    const normalized = styleName.toLowerCase().replace(/\s+/g, '');
+    
+    // 직접 매핑 확인
+    if (masterMap[styleName]) return masterMap[styleName];
+    if (masterMap[normalized]) return masterMap[normalized];
+    
+    // 부분 매칭
+    for (const [key, value] of Object.entries(masterMap)) {
+      if (normalized.includes(key.toLowerCase()) || key.toLowerCase().includes(normalized)) {
+        return value;
+      }
+    }
+    
+    return { fullName: styleName, movement: '' };
+  };
+
   const formatWorkName = (workName) => {
     if (!workName) return '대표작';
     
@@ -1095,7 +1213,7 @@ const ResultScreen = ({
     console.log('🎨 formatArtistName input:', artistName);
     console.log('🎨 formatArtistName normalized:', normalized);
     
-    // 영문 이름 → 한글(Full Name) 매핑
+    // 영문 이름 → 한글 풀네임(영문 풀네임) 매핑
     const nameMap = {
       // 고대 미술
       'ancient-greek-sculpture': '고대 조각(Ancient Sculpture)',
@@ -1119,121 +1237,120 @@ const ResultScreen = ({
       // 르네상스
       'leonardo': '레오나르도 다 빈치(Leonardo da Vinci)',
       'leonardo da vinci': '레오나르도 다 빈치(Leonardo da Vinci)',
-      'michelangelo': '미켈란젤로(Michelangelo Buonarroti)',
-      'raphael': '라파엘로(Raffaello Sanzio)',
-      'botticelli': '보티첼리(Sandro Botticelli)',
-      'titian': '티치아노(Tiziano Vecellio)',
+      'michelangelo': '미켈란젤로 부오나로티(Michelangelo Buonarroti)',
+      'raphael': '라파엘로 산치오(Raffaello Sanzio)',
+      'botticelli': '산드로 보티첼리(Sandro Botticelli)',
+      'titian': '티치아노 베첼리오(Tiziano Vecellio)',
       
       // 바로크
       'caravaggio': '카라바조(Caravaggio)',
-      'rembrandt': '렘브란트(Rembrandt van Rijn)',
-      'vermeer': '베르메르(Johannes Vermeer)',
-      'velazquez': '벨라스케스(Diego Velázquez)',
-      'rubens': '루벤스(Peter Paul Rubens)',
-      'peter paul rubens': '루벤스(Peter Paul Rubens)',
+      'rembrandt': '렘브란트 판 레인(Rembrandt van Rijn)',
+      'vermeer': '요하네스 베르메르(Johannes Vermeer)',
+      'velazquez': '디에고 벨라스케스(Diego Velázquez)',
+      'rubens': '페테르 파울 루벤스(Peter Paul Rubens)',
+      'peter paul rubens': '페테르 파울 루벤스(Peter Paul Rubens)',
       
       // 로코코
-      'watteau': '와토(Jean-Antoine Watteau)',
-      'jean-antoine watteau': '와토(Jean-Antoine Watteau)',
-      'boucher': '부셰(François Boucher)',
-      'françois boucher': '부셰(François Boucher)',
-      'francois boucher': '부셰(François Boucher)',
-      'jean-honoré fragonard': '프라고나르(Jean-Honoré Fragonard)',
-      'jean-honore fragonard': '프라고나르(Jean-Honoré Fragonard)',
-      'fragonard': '프라고나르(Jean-Honoré Fragonard)',
+      'watteau': '장 앙투안 와토(Jean-Antoine Watteau)',
+      'jean-antoine watteau': '장 앙투안 와토(Jean-Antoine Watteau)',
+      'boucher': '프랑수아 부셰(François Boucher)',
+      'françois boucher': '프랑수아 부셰(François Boucher)',
+      'francois boucher': '프랑수아 부셰(François Boucher)',
+      'jean-honoré fragonard': '장 오노레 프라고나르(Jean-Honoré Fragonard)',
+      'jean-honore fragonard': '장 오노레 프라고나르(Jean-Honoré Fragonard)',
+      'fragonard': '장 오노레 프라고나르(Jean-Honoré Fragonard)',
       
       // 신고전주의
-      'jacques-louis-david': '다비드(Jacques-Louis David)',
-      'david': '다비드(Jacques-Louis David)',
-      'ingres': '앵그르(Jean-Auguste-Dominique Ingres)',
-      'jean-auguste-dominique ingres': '앵그르(Jean-Auguste-Dominique Ingres)',
+      'jacques-louis-david': '자크 루이 다비드(Jacques-Louis David)',
+      'david': '자크 루이 다비드(Jacques-Louis David)',
+      'ingres': '장 오귀스트 도미니크 앵그르(Jean-Auguste-Dominique Ingres)',
+      'jean-auguste-dominique ingres': '장 오귀스트 도미니크 앵그르(Jean-Auguste-Dominique Ingres)',
       
       // 낭만주의
-      'turner': '터너(J.M.W. Turner)',
-      'j.m.w. turner': '터너(J.M.W. Turner)',
-      'william turner': '터너(J.M.W. Turner)',
-      'friedrich': '프리드리히(Caspar David Friedrich)',
-      'caspar david friedrich': '프리드리히(Caspar David Friedrich)',
-      'delacroix': '들라크루아(Eugène Delacroix)',
-      'eugène delacroix': '들라크루아(Eugène Delacroix)',
-      'eugene delacroix': '들라크루아(Eugène Delacroix)',
-      'goya': '고야(Francisco Goya)',
-      'francisco goya': '고야(Francisco Goya)',
+      'turner': '윌리엄 터너(J.M.W. Turner)',
+      'j.m.w. turner': '윌리엄 터너(J.M.W. Turner)',
+      'william turner': '윌리엄 터너(J.M.W. Turner)',
+      'friedrich': '카스파르 다비트 프리드리히(Caspar David Friedrich)',
+      'caspar david friedrich': '카스파르 다비트 프리드리히(Caspar David Friedrich)',
+      'delacroix': '외젠 들라크루아(Eugène Delacroix)',
+      'eugène delacroix': '외젠 들라크루아(Eugène Delacroix)',
+      'eugene delacroix': '외젠 들라크루아(Eugène Delacroix)',
+      'goya': '프란시스코 고야(Francisco Goya)',
+      'francisco goya': '프란시스코 고야(Francisco Goya)',
       
       // 사실주의
-      'millet': '밀레(Jean-François Millet)',
-      'jean-françois millet': '밀레(Jean-François Millet)',
-      'jean-francois millet': '밀레(Jean-François Millet)',
-      'manet': '마네(Édouard Manet)',
-      'édouard manet': '마네(Édouard Manet)',
-      'edouard manet': '마네(Édouard Manet)',
+      'millet': '장 프랑수아 밀레(Jean-François Millet)',
+      'jean-françois millet': '장 프랑수아 밀레(Jean-François Millet)',
+      'jean-francois millet': '장 프랑수아 밀레(Jean-François Millet)',
+      'manet': '에두아르 마네(Édouard Manet)',
+      'édouard manet': '에두아르 마네(Édouard Manet)',
+      'edouard manet': '에두아르 마네(Édouard Manet)',
       
       // 인상주의
-      'monet': '모네(Claude Monet)',
-      'claude monet': '모네(Claude Monet)',
-      'renoir': '르누아르(Pierre-Auguste Renoir)',
-      'pierre-auguste renoir': '르누아르(Pierre-Auguste Renoir)',
-      'degas': '드가(Edgar Degas)',
-      'edgar degas': '드가(Edgar Degas)',
-      'caillebotte': '칼리보트(Gustave Caillebotte)',
-      'gustave caillebotte': '칼리보트(Gustave Caillebotte)',
-      // v60: 피사로/시슬리 삭제 → 칼리보트 추가
+      'monet': '클로드 모네(Claude Monet)',
+      'claude monet': '클로드 모네(Claude Monet)',
+      'renoir': '피에르 오귀스트 르누아르(Pierre-Auguste Renoir)',
+      'pierre-auguste renoir': '피에르 오귀스트 르누아르(Pierre-Auguste Renoir)',
+      'degas': '에드가 드가(Edgar Degas)',
+      'edgar degas': '에드가 드가(Edgar Degas)',
+      'caillebotte': '귀스타브 카유보트(Gustave Caillebotte)',
+      'gustave caillebotte': '귀스타브 카유보트(Gustave Caillebotte)',
       
       // 후기인상주의
-      'van gogh': '반 고흐(Vincent van Gogh)',
-      'vincent van gogh': '반 고흐(Vincent van Gogh)',
-      'cézanne': '세잔(Paul Cézanne)',
-      'cezanne': '세잔(Paul Cézanne)',
-      'paul cézanne': '세잔(Paul Cézanne)',
-      'paul cezanne': '세잔(Paul Cézanne)',
-      'gauguin': '고갱(Paul Gauguin)',
-      'paul gauguin': '고갱(Paul Gauguin)',
-      'seurat': '쇠라(Georges Seurat)',
-      'georges seurat': '쇠라(Georges Seurat)',
-      'signac': '시냐크(Paul Signac)',
-      'paul signac': '시냐크(Paul Signac)',
+      'van gogh': '빈센트 반 고흐(Vincent van Gogh)',
+      'vincent van gogh': '빈센트 반 고흐(Vincent van Gogh)',
+      'cézanne': '폴 세잔(Paul Cézanne)',
+      'cezanne': '폴 세잔(Paul Cézanne)',
+      'paul cézanne': '폴 세잔(Paul Cézanne)',
+      'paul cezanne': '폴 세잔(Paul Cézanne)',
+      'gauguin': '폴 고갱(Paul Gauguin)',
+      'paul gauguin': '폴 고갱(Paul Gauguin)',
+      'seurat': '조르주 쇠라(Georges Seurat)',
+      'georges seurat': '조르주 쇠라(Georges Seurat)',
+      'signac': '폴 시냐크(Paul Signac)',
+      'paul signac': '폴 시냐크(Paul Signac)',
       
       // 야수파
-      'matisse': '마티스(Henri Matisse)',
-      'henri matisse': '마티스(Henri Matisse)',
-      'derain': '드랭(André Derain)',
-      'andré derain': '드랭(André Derain)',
-      'andre derain': '드랭(André Derain)',
-      'vlaminck': '블라맹크(Maurice de Vlaminck)',
-      'maurice de vlaminck': '블라맹크(Maurice de Vlaminck)',
+      'matisse': '앙리 마티스(Henri Matisse)',
+      'henri matisse': '앙리 마티스(Henri Matisse)',
+      'derain': '앙드레 드랭(André Derain)',
+      'andré derain': '앙드레 드랭(André Derain)',
+      'andre derain': '앙드레 드랭(André Derain)',
+      'vlaminck': '모리스 드 블라맹크(Maurice de Vlaminck)',
+      'maurice de vlaminck': '모리스 드 블라맹크(Maurice de Vlaminck)',
       
       // 표현주의
-      'munch': '뭉크(Edvard Munch)',
-      'edvard munch': '뭉크(Edvard Munch)',
-      'kirchner': '키르히너(Ernst Ludwig Kirchner)',
-      'ernst ludwig kirchner': '키르히너(Ernst Ludwig Kirchner)',
+      'munch': '에드바르 뭉크(Edvard Munch)',
+      'edvard munch': '에드바르 뭉크(Edvard Munch)',
+      'kirchner': '에른스트 루트비히 키르히너(Ernst Ludwig Kirchner)',
+      'ernst ludwig kirchner': '에른스트 루트비히 키르히너(Ernst Ludwig Kirchner)',
       'schiele': '에곤 실레(Egon Schiele)',
       'egon schiele': '에곤 실레(Egon Schiele)',
-      'kandinsky': '칸딘스키(Wassily Kandinsky)',
-      'wassily kandinsky': '칸딘스키(Wassily Kandinsky)',
-      'kokoschka': '코코슈카(Oskar Kokoschka)',
-      'oskar kokoschka': '코코슈카(Oskar Kokoschka)',
+      'kandinsky': '바실리 칸딘스키(Wassily Kandinsky)',
+      'wassily kandinsky': '바실리 칸딘스키(Wassily Kandinsky)',
+      'kokoschka': '오스카 코코슈카(Oskar Kokoschka)',
+      'oskar kokoschka': '오스카 코코슈카(Oskar Kokoschka)',
       
       // 입체주의
-      'picasso': '피카소(Pablo Picasso)',
-      'pablo picasso': '피카소(Pablo Picasso)',
+      'picasso': '파블로 피카소(Pablo Picasso)',
+      'pablo picasso': '파블로 피카소(Pablo Picasso)',
       
       // 초현실주의
-      'magritte': '마그리트(René Magritte)',
-      'rené magritte': '마그리트(René Magritte)',
-      'rene magritte': '마그리트(René Magritte)',
-      'miro': '미로(Joan Miró)',
-      'miró': '미로(Joan Miró)',
-      'joan miro': '미로(Joan Miró)',
-      'joan miró': '미로(Joan Miró)',
-      'chagall': '샤갈(Marc Chagall)',
-      'marc chagall': '샤갈(Marc Chagall)',
+      'magritte': '르네 마그리트(René Magritte)',
+      'rené magritte': '르네 마그리트(René Magritte)',
+      'rene magritte': '르네 마그리트(René Magritte)',
+      'miro': '호안 미로(Joan Miró)',
+      'miró': '호안 미로(Joan Miró)',
+      'joan miro': '호안 미로(Joan Miró)',
+      'joan miró': '호안 미로(Joan Miró)',
+      'chagall': '마르크 샤갈(Marc Chagall)',
+      'marc chagall': '마르크 샤갈(Marc Chagall)',
       
       // 팝아트
-      'warhol': '워홀(Andy Warhol)',
-      'andy warhol': '워홀(Andy Warhol)',
-      'lichtenstein': '리히텐슈타인(Roy Lichtenstein)',
-      'roy lichtenstein': '리히텐슈타인(Roy Lichtenstein)',
+      'warhol': '앤디 워홀(Andy Warhol)',
+      'andy warhol': '앤디 워홀(Andy Warhol)',
+      'lichtenstein': '로이 리히텐슈타인(Roy Lichtenstein)',
+      'roy lichtenstein': '로이 리히텐슈타인(Roy Lichtenstein)',
       'haring': '키스 해링(Keith Haring)',
       'keith haring': '키스 해링(Keith Haring)',
       'keith-haring': '키스 해링(Keith Haring)',
@@ -1600,8 +1717,24 @@ const ResultScreen = ({
           </p>
         </div>
 
-        {/* 원클릭: 이미지만 표시 */}
-        {isFullTransform && (
+        {/* 원클릭: currentIndex === -1일 때 1차 교육 (원본 사진), 그 외 결과 이미지 */}
+        {isFullTransform && currentIndex === -1 && (
+          <div className="primary-education-view">
+            <div className="original-photo-wrapper">
+              <img src={URL.createObjectURL(originalPhoto)} alt="원본 사진" className="original-photo-large" />
+              <div className="photo-label">내 사진</div>
+            </div>
+            {getPrimaryEducation() && (
+              <div className="primary-edu-card">
+                <h3>{getPrimaryEducation().title}</h3>
+                <p>{getPrimaryEducation().content}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 원클릭: 결과 이미지 표시 */}
+        {isFullTransform && currentIndex >= 0 && (
           <div className="result-image-wrapper">
             <img src={displayImage} alt="변환 결과" className="result-image" />
           </div>
@@ -1610,25 +1743,39 @@ const ResultScreen = ({
         {/* 단일 변환: Before/After Slider */}
         {!isFullTransform && (
           <div className="comparison-wrapper">
-            <BeforeAfter 
-              beforeImage={URL.createObjectURL(originalPhoto)}
-              afterImage={displayImage}
-            />
+            {isRetrying ? (
+              <div className="retry-in-progress single-mode">
+                <div className="retry-status">
+                  <div className="spinner-medium"></div>
+                  <p className="retry-text">{retryProgress || '재변환 중...'}</p>
+                </div>
+                <div className="retry-education">
+                  <p>🎨 잠시만 기다려주세요. AI가 다시 변환 중입니다...</p>
+                </div>
+              </div>
+            ) : (
+              <BeforeAfter 
+                beforeImage={URL.createObjectURL(originalPhoto)}
+                afterImage={displayImage}
+              />
+            )}
           </div>
         )}
 
-        {/* Toggle Button */}
-        <div className="info-toggle">
-          <button 
-            className="toggle-button"
-            onClick={() => setShowInfo(!showInfo)}
-          >
-            {showInfo ? '🔽 작품 설명 숨기기' : '🔼 작품 설명 보기'}
-          </button>
-        </div>
+        {/* Toggle Button - 원클릭 1차 교육일 때 숨김 */}
+        {!(isFullTransform && currentIndex === -1) && (
+          <div className="info-toggle">
+            <button 
+              className="toggle-button"
+              onClick={() => setShowInfo(!showInfo)}
+            >
+              {showInfo ? '🔽 작품 설명 숨기기' : '🔼 작품 설명 보기'}
+            </button>
+          </div>
+        )}
 
-        {/* Education Card */}
-        {showInfo && (
+        {/* Education Card - 원클릭 1차 교육일 때 숨김 */}
+        {showInfo && !(isFullTransform && currentIndex === -1) && (
           <div className="technique-card">
             
             {/* Card Header */}
@@ -1637,14 +1784,25 @@ const ResultScreen = ({
                 {isFullTransform ? (currentResult?.style?.icon || '🎨') : (selectedStyle.icon || '🎨')}
               </div>
               <div>
-                <h2>{isFullTransform ? (currentResult?.style?.name || selectedStyle.name) : selectedStyle.name}</h2>
+                <h2>
+                  {/* 거장: 풀네임(영문) 표시, 그 외: 기존 스타일명 */}
+                  {(() => {
+                    const category = isFullTransform ? currentResult?.style?.category : selectedStyle.category;
+                    const styleName = isFullTransform ? (currentResult?.style?.name || selectedStyle.name) : selectedStyle.name;
+                    if (category === 'masters') {
+                      return getMasterInfo(styleName).fullName;
+                    }
+                    return styleName;
+                  })()}
+                </h2>
                 <p className="technique-subtitle">
                   <span className="artist-name">
-                    {/* 거장: 작품명 표시, 동양화: 기법명 통일, 그 외: 화가명 */}
+                    {/* 거장: 화파명 표시, 동양화: 기법명 통일, 그 외: 화가명 */}
                     {(() => {
                       const category = isFullTransform ? currentResult?.style?.category : selectedStyle.category;
-                      if (category === 'masters' && displayWork) {
-                        return formatWorkName(displayWork);
+                      const styleName = isFullTransform ? (currentResult?.style?.name || selectedStyle.name) : selectedStyle.name;
+                      if (category === 'masters') {
+                        return getMasterInfo(styleName).movement;
                       } else if (category === 'oriental') {
                         return formatOrientalStyle(displayArtist);
                       } else {
@@ -1714,13 +1872,17 @@ const ResultScreen = ({
         {isFullTransform && (
           <div className="fullTransform-nav">
             <button 
-              onClick={() => setCurrentIndex(i => Math.max(0, i - 1))}
-              disabled={currentIndex === 0}
+              onClick={() => setCurrentIndex(i => Math.max(-1, i - 1))}
+              disabled={currentIndex === -1}
               className="nav-btn"
             >
               ◀ 이전
             </button>
             <div className="nav-dots">
+              {/* 진행 카운터 (1차 교육일 때 0/N, 결과 볼 때 1/N ~ N/N) */}
+              <span className="progress-counter">
+                {currentIndex === -1 ? `0/${fullTransformResults.length}` : `${currentIndex + 1}/${fullTransformResults.length}`}
+              </span>
               {fullTransformResults.map((_, idx) => (
                 <button
                   key={idx}
@@ -1746,7 +1908,7 @@ const ResultScreen = ({
               <div className="retry-in-progress">
                 <div className="retry-status">
                   <div className="spinner-medium"></div>
-                  <p className="retry-text">{retryProgress}</p>
+                  <p className="retry-text">{retryProgress || '재변환 중...'}</p>
                 </div>
                 <div className="retry-education">
                   <p>🎨 잠시만 기다려주세요. AI가 다시 변환 중입니다...</p>
@@ -2119,6 +2281,15 @@ const ResultScreen = ({
           padding: 2rem;
         }
 
+        .retry-in-progress.single-mode {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          min-height: 300px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+
         .retry-status {
           display: flex;
           flex-direction: column;
@@ -2251,6 +2422,63 @@ const ResultScreen = ({
         .result-image {
           width: 100%;
           display: block;
+        }
+
+        /* 1차 교육 화면 (원본 사진) */
+        .primary-education-view {
+          margin-bottom: 16px;
+        }
+        .original-photo-wrapper {
+          position: relative;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+          border: 3px solid #667eea;
+          margin-bottom: 16px;
+        }
+        .original-photo-large {
+          width: 100%;
+          display: block;
+        }
+        .photo-label {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: rgba(102, 126, 234, 0.9);
+          color: white;
+          text-align: center;
+          padding: 8px;
+          font-weight: 600;
+        }
+        .primary-edu-card {
+          background: linear-gradient(135deg, #fff5f5 0%, #fff0f5 100%);
+          border-left: 4px solid #667eea;
+          border-radius: 12px;
+          padding: 16px;
+        }
+        .primary-edu-card h3 {
+          color: #667eea;
+          margin: 0 0 12px;
+          font-size: 16px;
+        }
+        .primary-edu-card p {
+          color: #333;
+          line-height: 1.7;
+          font-size: 14px;
+          margin: 0;
+          white-space: pre-line;
+        }
+
+        /* 진행 카운터 */
+        .progress-counter {
+          background: #667eea;
+          color: white;
+          padding: 6px 12px;
+          border-radius: 12px;
+          font-size: 13px;
+          font-weight: 600;
+          margin-right: 8px;
         }
       `}</style>
     </div>
