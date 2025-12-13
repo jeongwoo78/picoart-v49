@@ -705,6 +705,13 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
             {/* 1차 교육 */}
             {viewIndex === -1 && showEducation && getPrimaryEducation() && (
               <div className="edu-card primary">
+                {/* 원본 사진 표시 */}
+                {photo && (
+                  <div className="original-photo-preview">
+                    <img src={photo} alt="원본 사진" />
+                    <span className="photo-label">내 사진</span>
+                  </div>
+                )}
                 <h3>{getPrimaryEducation().title}</h3>
                 <p>{getPrimaryEducation().content}</p>
                 {completedCount > 0 && <p className="hint">👆 완료된 결과를 확인하세요</p>}

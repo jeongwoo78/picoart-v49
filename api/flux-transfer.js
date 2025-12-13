@@ -2213,6 +2213,10 @@ INSTRUCTIONS:
 3. Generate a FLUX prompt that STARTS with detailed subject description
 4. IMPORTANT: Preserve the original subject - if it's a baby, keep it as a baby; if elderly, keep elderly
 5. CRITICAL: If only 1 person in photo, add "DO NOT add extra people in background"
+6. 🎨 ATTRACTIVE RENDERING RULE: ALL people must be rendered ATTRACTIVELY and BEAUTIFULLY.
+   - If MALE: make him look HANDSOME, MASCULINE, and DIGNIFIED
+   - If FEMALE: make her look PRETTY, FEMININE, and ELEGANT
+   - Idealized flattering portrayal while preserving identity
 
 Return ONLY valid JSON (no markdown):
 {
@@ -2221,13 +2225,14 @@ Return ONLY valid JSON (no markdown):
   "gender": "male" or "female" or "both" or null,
   "age_range": "baby/child/teen/young_adult/adult/middle_aged/elderly" or null,
   "ethnicity": "asian" or "caucasian" or "african" or "hispanic" or "middle_eastern" or "mixed" or null,
-  "physical_description": "for MALE: strong jaw, angular face, short hair, broad shoulders etc. For FEMALE: soft features, delicate face etc. ALWAYS include skin tone and ethnic features." or null,
+  "hair": "CRITICAL - describe exactly: 'bald/balding/receding hairline' OR 'short/medium/long [color] hair'. Must match photo precisely. Examples: 'bald head', 'short black hair', 'long brown wavy hair', 'gray receding hairline'" or null,
+  "physical_description": "for MALE: strong jaw, angular face, broad shoulders etc. For FEMALE: soft features, delicate face etc. ALWAYS include skin tone and ethnic features." or null,
   "person_count": 1 or 2 or 3 (number of people in photo),
   "background_type": "simple" or "complex" or "outdoor" or "indoor" or "studio",
   "selected_artist": "${categoryName}",
   "selected_work": "exact title of the masterwork you selected",
   "reason": "why this masterwork matches this photo",
-  "prompt": "Start with 'MALE/FEMALE SUBJECT with [physical features]' if person, then 'painting by ${categoryName} in the style of [selected work title], [that work's distinctive techniques]'. If person_count=1, END with 'DO NOT add extra people, NO hallucinated figures in background'"
+  "prompt": "Start with 'MALE/FEMALE SUBJECT with [hair description] and [physical features], rendered ATTRACTIVELY and BEAUTIFULLY' if person, then 'painting by ${categoryName} in the style of [selected work title], [that work's distinctive techniques]'. If person_count=1, END with 'DO NOT add extra people, NO hallucinated figures in background'"
 }`;
       
     } else if (categoryType === 'oriental') {
@@ -2276,6 +2281,11 @@ CRITICAL INSTRUCTIONS FOR PROMPT GENERATION:
    - No characters, no seals, no inscriptions
    - PURE VISUAL ART ONLY
 
+4. 🎨 ATTRACTIVE RENDERING RULE: ALL people must be rendered ATTRACTIVELY and BEAUTIFULLY.
+   - If MALE: HANDSOME, MASCULINE, DIGNIFIED appearance
+   - If FEMALE: PRETTY, FEMININE, ELEGANT appearance
+   - Idealized flattering portrayal while preserving identity and hair
+
 5. PROMPT MUST INCLUDE THIS EXACT ENDING:
    "🚨 NO TEXT ON PAINTING - leave all areas completely blank, no characters, no writing, no seals, PURE VISUAL ART ONLY"
 
@@ -2285,11 +2295,12 @@ Return ONLY valid JSON (no markdown):
   "subject_type": "person" or "landscape" or "animal" or "object",
   "gender": "male" or "female" or null,
   "age_range": "baby/child/teen/young_adult/adult/middle_aged/elderly" or null,
-  "physical_description": "for MALE: strong jaw, angular face, short hair, broad shoulders etc. For FEMALE: soft features, delicate face etc." or null,
+  "hair": "CRITICAL - describe exactly: 'bald/balding/receding hairline' OR 'short/medium/long [color] hair'. Must match photo precisely." or null,
+  "physical_description": "for MALE: strong jaw, angular face, broad shoulders etc. For FEMALE: soft features, delicate face etc." or null,
   "selected_artist": "Korean Minhwa" or "Korean Pungsokdo" or "Korean Jingyeong Landscape",
   "selected_style": "minhwa" or "pungsokdo" or "landscape",
   "reason": "why this style fits (1 sentence)",
-  "prompt": "KEEP UNDER 150 WORDS. [Gender rule] Korean [style] with key characteristics. 🚨 NO TEXT ON PAINTING - completely blank, PURE VISUAL ART ONLY"
+  "prompt": "KEEP UNDER 150 WORDS. [Gender rule including hair description], rendered ATTRACTIVELY and BEAUTIFULLY, Korean [style] with key characteristics. 🚨 NO TEXT ON PAINTING - completely blank, PURE VISUAL ART ONLY"
 }
 
 CRITICAL: Keep prompt field UNDER 150 WORDS to avoid truncation.`;
@@ -2332,7 +2343,12 @@ CRITICAL INSTRUCTIONS FOR PROMPT GENERATION:
    - No characters, no seals, no inscriptions
    - PURE VISUAL ART ONLY
 
-3. PROMPT MUST INCLUDE THIS EXACT ENDING:
+3. 🎨 ATTRACTIVE RENDERING RULE: ALL people must be rendered ATTRACTIVELY and BEAUTIFULLY.
+   - If MALE: HANDSOME, MASCULINE, DIGNIFIED appearance
+   - If FEMALE: PRETTY, FEMININE, ELEGANT appearance
+   - Idealized flattering portrayal while preserving identity and hair
+
+4. PROMPT MUST INCLUDE THIS EXACT ENDING:
    "🚨 NO TEXT ON PAINTING - leave all areas completely blank, no characters, no writing, no seals, PURE VISUAL ART ONLY"
 
 Return ONLY valid JSON (no markdown):
@@ -2341,11 +2357,12 @@ Return ONLY valid JSON (no markdown):
   "subject_type": "person" or "landscape" or "animal" or "object",
   "gender": "male" or "female" or null,
   "age_range": "baby/child/teen/young_adult/adult/middle_aged/elderly" or null,
-  "physical_description": "for MALE: strong jaw, angular face, short hair, broad shoulders etc. For FEMALE: soft features, delicate face etc." or null,
+  "hair": "CRITICAL - describe exactly: 'bald/balding/receding hairline' OR 'short/medium/long [color] hair'. Must match photo precisely." or null,
+  "physical_description": "for MALE: strong jaw, angular face, broad shoulders etc. For FEMALE: soft features, delicate face etc." or null,
   "selected_artist": "Chinese Ink Wash" or "Chinese Gongbi" or "Chinese Huaniao",
   "selected_style": "ink_wash" or "gongbi" or "huaniao",
   "reason": "why this style fits (1 sentence)",
-  "prompt": "KEEP UNDER 150 WORDS. [Gender rule] Chinese [style] with key characteristics. 🚨 NO TEXT ON PAINTING - completely blank, PURE VISUAL ART ONLY"
+  "prompt": "KEEP UNDER 150 WORDS. [Gender rule including hair description], rendered ATTRACTIVELY and BEAUTIFULLY, Chinese [style] with key characteristics. 🚨 NO TEXT ON PAINTING - completely blank, PURE VISUAL ART ONLY"
 }
 
 CRITICAL: Keep prompt field UNDER 150 WORDS to avoid truncation.`;
@@ -2522,6 +2539,10 @@ Instructions:
 5. Include DETAILED style characteristics in your prompt
 6. IMPORTANT: Start prompt with subject description if person
 7. CRITICAL: If only 1 person in photo, add "DO NOT add extra people in background, keep background clean"
+8. 🎨 ATTRACTIVE RENDERING RULE: ALL people must be rendered ATTRACTIVELY and BEAUTIFULLY.
+   - If MALE: HANDSOME, MASCULINE, DIGNIFIED appearance
+   - If FEMALE: PRETTY, FEMININE, ELEGANT appearance
+   - Idealized flattering portrayal while preserving identity
 
 Return JSON only:
 {
@@ -2530,12 +2551,13 @@ Return JSON only:
   "gender": "male" or "female" or "both" or null,
   "age_range": "baby/child/teen/young_adult/adult/middle_aged/elderly" or null,
   "ethnicity": "asian" or "caucasian" or "african" or "hispanic" or "middle_eastern" or "mixed" or null,
-  "physical_description": "for MALE: strong jaw, angular face, short hair, broad shoulders etc. For FEMALE: soft features, delicate face etc. ALWAYS include skin tone and ethnic features." or null,
+  "hair": "CRITICAL - describe exactly: 'bald/balding/receding hairline' OR 'short/medium/long [color] hair'. Must match photo precisely. Examples: 'bald head', 'short black hair', 'long brown wavy hair'" or null,
+  "physical_description": "for MALE: strong jaw, angular face, broad shoulders etc. For FEMALE: soft features, delicate face etc. ALWAYS include skin tone and ethnic features." or null,
   "person_count": 1 or 2 or 3 (number of people in photo),
   "background_type": "simple" or "complex" or "outdoor" or "indoor" or "studio",
   "selected_artist": "Artist Full Name",
   "reason": "why this artist fits (1 sentence)",
-  "prompt": "Start with 'MALE/FEMALE SUBJECT with [physical features]' if person, then 'painting by [Artist], [artist's signature technique], [detailed visual characteristics]'. If person_count=1, END with 'DO NOT add extra people, NO hallucinated figures in background, keep background CLEAN'"
+  "prompt": "Start with 'MALE/FEMALE SUBJECT with [hair description] and [physical features], rendered ATTRACTIVELY and BEAUTIFULLY' if person, then 'painting by [Artist], [artist's signature technique], [detailed visual characteristics]'. If person_count=1, END with 'DO NOT add extra people, NO hallucinated figures in background, keep background CLEAN'"
 }`;
         }
       }
@@ -2668,9 +2690,15 @@ function buildIdentityPrompt(visionAnalysis) {
     parts.push(ageMap[visionAnalysis.age_range] || visionAnalysis.age_range);
   }
   
-  // 머리
+  // 머리 (매우 중요! - 대머리/머리카락 정확히 보존)
   if (visionAnalysis.hair) {
-    parts.push(visionAnalysis.hair);
+    // 대머리/탈모 관련 키워드 체크
+    const hairLower = visionAnalysis.hair.toLowerCase();
+    if (hairLower.includes('bald') || hairLower.includes('balding') || hairLower.includes('receding')) {
+      parts.push(`HAIR: ${visionAnalysis.hair} - PRESERVE BALD/BALDING appearance exactly`);
+    } else {
+      parts.push(`HAIR: ${visionAnalysis.hair} - MUST have hair as shown, DO NOT make bald`);
+    }
   }
   
   // 민족성 (매우 중요!)
