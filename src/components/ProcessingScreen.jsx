@@ -755,7 +755,7 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
                     disabled={idx >= completedCount}
                   />
                 ))}
-                <span className="count">{completedCount}/{totalCount}</span>
+                <span className="count">{viewIndex === -1 ? `📚` : `${viewIndex + 1}/${totalCount}`}</span>
               </div>
               
               <button 
